@@ -2,7 +2,7 @@
 
 An interactive history of coachbuilt **Rolls-Royce, Bentley and Italian** cars and the craftsmen who bodied them: Barker, Hooper, H.J. Mulliner, Touring, Zagato, Pininfarina, Scaglietti and others.
 
-It is a single self-contained web page. Open `index.html` in any browser and it works, with no install, no build step and no server.
+It is a self-contained web page. Open `index.html` in any browser and it works, with no install, no build step and no server. A one-file version can be built with `python tools/build_single_file.py`.
 
 ![Home page](docs/screenshots/01-home.png)
 
@@ -67,25 +67,25 @@ Every car has eight sub-tabs: Story, Specs, Cost and Value, Photos, Owners and R
 
 ## Languages and technologies
 
-Everything in the page is written by hand with no frameworks and no libraries.
+Everything is written by hand with no frameworks and no libraries.
 
 | Language | Used for | Where |
 |---|---|---|
+| **JavaScript** (vanilla, ES2020) | All behaviour: navigation and Back button, car pages, search, quiz, compare, timeline, photo handling, input escaping and safe-link checks. Also holds the car data and the embedded photos. | `app.js` |
+| **CSS3** | Layout (flexbox and grid), per-marque colour themes using CSS variables, responsive phone layout | `styles.css` |
 | **HTML5** | Page structure, tabs, forms, inline SVG background art | `index.html` |
-| **CSS3** | Layout (flexbox and grid), per-marque colour themes using CSS variables, responsive phone layout | inside `index.html` |
-| **JavaScript** (vanilla, ES2020, no libraries) | All behaviour: navigation and Back button, car pages, search, quiz, compare, timeline, photo handling, input escaping and safe-link checks | inside `index.html` |
-| **Python 3** (test tooling only) | Automated smoke test and screenshot generator, using Playwright | `tests/`, `tools/` |
+| **Python 3** (tooling only) | Automated smoke test, screenshot generator and the single-file build script, using Playwright | `tests/`, `tools/` |
 | **Markdown** | This documentation | `README.md` |
 
 Other facts:
 
-- The page is one file of roughly 2.8 MB. About 90 photos are embedded as base64 images, so it works offline.
-- The page has a strict Content Security Policy: no remote scripts, fonts, images or frames. External links open in a new tab and only `https` links are allowed.
+- About 90 photos are embedded in `app.js` as base64 images, so the page works offline. That is why `app.js` is about 2.8 MB and GitHub counts almost all of the code as JavaScript; the hand-written logic is roughly 820 lines.
+- The page is designed to run under a strict Content Security Policy: no remote scripts, images or frames. The only outside request is the optional Google Fonts stylesheet; offline, it falls back to system serif fonts. External links open in a new tab and only `https` links are allowed.
 - No cookies and no tracking.
 
 ## Run it
 
-Open `index.html` in a browser. That is all.
+Open `index.html` in a browser. That is all. (For a single portable file, run `python tools/build_single_file.py`; it writes `dist/coachbuilt-collection.html`.)
 
 ## Test it
 
@@ -104,10 +104,13 @@ The **Identify a Car** tab, the **News** tab, the automatic quiz updates and the
 ## Project layout
 
 ```
-index.html                  the whole app (HTML, CSS and JavaScript)
+index.html                  page structure (HTML)
+styles.css                  all styling (CSS)
+app.js                      all behaviour, car data and photos (JavaScript)
 docs/screenshots/           images used in this README
 tests/smoke_test.py         Python + Playwright smoke test
 tools/make_screenshots.py   regenerates the screenshots
+tools/build_single_file.py  inlines CSS and JS into one portable HTML file
 ```
 
 ## Photo credits and rights
